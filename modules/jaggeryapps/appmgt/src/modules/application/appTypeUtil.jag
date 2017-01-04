@@ -98,8 +98,8 @@ LambdaAppTypeUtil.prototype.getEndpoints = function (deploymentUrl, versionId) {
         //get(swaggerUrl, {}, "json");
 
         var swaggerEndpoints = [];
-        swaggerEndpoints.push({context : "/swagger", url: swaggerUrl});
         endpoints = createJsonResponse(null, null, null, swaggerEndpoints);
+        swaggerEndpoints.push({context : "/swagger", url: swaggerUrl});
     } catch(e) {
         return null;
     }

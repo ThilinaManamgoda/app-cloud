@@ -593,7 +593,8 @@ INSERT INTO `AC_CLOUD_APP_TYPE` (`cloud_id`, `app_type_id`) VALUES
 (1, 4),
 (1, 5),
 (1, 6),
-(1, 7);
+(1, 7),
+(1,8);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
