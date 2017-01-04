@@ -206,3 +206,18 @@ function getProperties(elementId){
     });
     return propArray;
 }
+
+function getLambdaProperties(){
+        var propArray = [];
+        var classProperty = {};
+        classProperty["key"] = "LAMBDA_CLASS";
+        classProperty["value"] = $('#lambdaClass').val();
+        propArray.push(classProperty);
+        if($('#functionName').val()){
+            var functionProperty = {};
+            functionProperty["key"] = "LAMBDA_FUNCTION_NAME";
+            functionProperty["value"] =  $('#functionName').val();
+            propArray.push(functionProperty);
+        }
+        return propArray;
+}

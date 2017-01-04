@@ -8,5 +8,5 @@
     "jaggery":{"type":"jaggery", "icon":"fw-jaggery", "color":"app-color-six", "displayName":"WSO2 Jaggery Application", "buildable":"false", "extension":"zip", "defaultContext":"/", "appContext" : "true", "appTypeUtilObject" : "new JaggeryAppTypeUtil()"},
     "wso2dataservice":{"type":"wso2dataservice", "icon":"fw-dss", "color":"app-color-seven", "displayName":"WSO2 Data Service", "buildable":"true", "extension":"car", "defaultContext":"/services/<Service_Name>?wsdl", "appContext" : "false", "appTypeUtilObject" : "new DSSAppTypeUtil()"},
     "custom":{"type":"custom", "icon":"fw-document", "color":"app-color-five", "displayName":"Custom Docker Image", "buildable":"true", "extension":"", "defaultContext":"/", "appContext" : "false" , "appTypeUtilObject" : "new CustomAppTypeUtil()"},
-    "lambda":{"type":"lambda", "icon":"fw-document", "color":"app-color-five", "displayName":"Lambda", "buildable":"true", "extension":"", "defaultContext":"/", "appContext" : "false" , "appTypeUtilObject" : "new LambdaAppTypeUtil()"}
+    "lambda":{"type":"lambda", "icon":"fw-document", "color":"app-color-five", "displayName":"Lambda", "buildable":"true", "extension":"jar", "defaultContext":"/", "appContext" : "false" , "appTypeUtilObject" : "new LambdaAppTypeUtil()"}
 }
