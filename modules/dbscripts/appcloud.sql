@@ -57,7 +57,8 @@ INSERT INTO `AC_APP_TYPE` (`id`, `name`, `description`) VALUES
 (4, 'jaggery', 'Allows you to write all parts of web applications, services and APIs in a completely JavaScript way.'),
 (5, 'wso2dataservice', 'Allows you to deploy a data service that is supported in WSO2 Data Services Server.'),
 (6, 'wso2esb', 'Allows you to deploy an ESB configuration that is supported by WSO2 Enterprise Service Bus'),
-(7, 'custom', 'Allows you to deploy applications using custom Docker images');
+(7, 'custom', 'Allows you to deploy applications using custom Docker images'),
+(8, 'lambda', 'Allows you to deploy Lambda Functions');
 
 -- -----------------------------------------------------
 -- Table `AppCloudDB`.`AC_RUNTIME`
@@ -271,7 +272,9 @@ INSERT INTO `AC_APP_TYPE_RUNTIME` (`app_type_id`, `runtime_id`) VALUES
 (1, 14),
 (1, 15),
 (1, 16),
-(2, 17);
+(2, 17),
+(8, 8);
+
 
 
 -- -----------------------------------------------------
