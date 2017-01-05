@@ -65,6 +65,7 @@ var log = new Log();
         }
 
         var unparsedRuntimeProps = request.getParameter("runtimeProperties");
+        log.error("creating **************************************************************************************************");
         var runtimeProperties = [];
         if(unparsedRuntimeProps){
             try {
@@ -75,6 +76,7 @@ var log = new Log();
                 return;
             }
             for (var i = 0; i < runtimeProperties.length; i++) {
+                log.error(runtimeProperties[i].key);
                 var keyValidation = validator.validateEnvKey(runtimeProperties[i].key);
                 if (!keyValidation.status) {
                     response.status = 400;

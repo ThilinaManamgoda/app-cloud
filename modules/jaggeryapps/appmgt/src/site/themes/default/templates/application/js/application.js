@@ -208,16 +208,18 @@ function getProperties(elementId){
 }
 
 function getLambdaProperties(){
-        var propArray = [];
-        var classProperty = {};
-        classProperty["key"] = "LAMBDA_CLASS";
-        classProperty["value"] = $('#lambdaClass').val();
-        propArray.push(classProperty);
-        if($('#functionName').val()){
-            var functionProperty = {};
-            functionProperty["key"] = "LAMBDA_FUNCTION_NAME";
-            functionProperty["value"] =  $('#functionName').val();
-            propArray.push(functionProperty);
-        }
-        return propArray;
+console.log("get Lambda props");
+    var propArray = [];
+    var classProperty = {};
+    classProperty["key"] = "LAMBDA_CLASS";
+    classProperty["value"] = $('#lambdaClass').val();
+    propArray.push(classProperty);
+    if($('#functionName').val()){
+        var functionProperty = {};
+        functionProperty["key"] = "LAMBDA_FUNCTION_NAME";
+        functionProperty["value"] =  $('#functionName').val();
+        propArray.push(functionProperty);
+    }
+    console.log(propArray);
+    return propArray;
 }

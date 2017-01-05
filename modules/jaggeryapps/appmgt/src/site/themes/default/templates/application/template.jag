@@ -232,11 +232,22 @@ jagg.template("application", function (inputs, outputs, jagg) {
 
                 $('#add-application').loadingButton({action:'show'});
                 e.preventDefault();
+                console.log("getting runtime vals");
                 var runtimeProperties = getProperties("env-pane");
-                if(<%=isLambda%>){//Add runtime variables for lambda function (Lambda_Class, Lambda_Function_Name)
+                   console.log("got runtime vals");
+                if(<%=isLambda%>){
+                       console.log("getting lambda runtime vals");
                     var lambdaRuntimeProperties = getLambdaProperties();
-                    runtimeProperties.concat(lambdaRuntimeProperties);
+                       console.log(lambdaRuntimeProperties);
+
+                       for(var i=0; i<lambdaRuntimeProperties.length;i++){
+                              runtimeProperties.push(lambdaRuntimeProperties[i]);
+                       }
+
+
                 }
+                console.log("before stringfy: "+runtimeProperties);
+                console.log("Stringfyyyingg "+  JSON.stringify(runtimeProperties));
                 var tags = getProperties("tags-pane");
                 var formData = new FormData($(this)[0]);
                 var url = $(this).attr("action");
@@ -794,7 +805,7 @@ jagg.template("application", function (inputs, outputs, jagg) {
     });
 
     function activateCreateApplication() {
-        
+          // console.log( JSON.stringify(getProperties("env-pane").concat(getLambdaProperties())));
         //first disable the button and then enable it only if condions are satisfied
         $("#add-application").prop("disabled", true);
 
