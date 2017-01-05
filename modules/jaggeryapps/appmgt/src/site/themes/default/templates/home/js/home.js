@@ -236,17 +236,40 @@ function listEnvs(){
     }
     var envString = '';
     var envTitleString = '';
-    for(var i = 0; i < envListLength; i++){
-        if(i >= 3){
-            break;
+    var isLambdaRuntimeProperty;
+    if(application.applicationType=='lambda'){
+
+     for(var i = 0; i < envListLength; i++){
+       isLambdaRuntimeProperty = (envs[i].propertyName=="LAMBDA_CLASS" || envs[i].propertyName== "LAMBDA_FUNCTION_NAME" );
+
+            if(i >= 5){
+                break;
+            }
+            if(!isLambdaRuntimeProperty){
+                     envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
+                     envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
+            }
+
         }
-        envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
-        envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
+        if(envListLength > 5) {
+            envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
+                                 + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
+        }
+    }else{
+         for(var i = 0; i < envListLength; i++){
+            if(i >= 3){
+                break;
+            }
+
+            envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
+            envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
+         }
+        if(envListLength > 3) {
+            envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
+                                  + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
+        }
     }
-    if(envListLength > 3) {
-        envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
-                             + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
-    }
+
 
     $('#env-list').html(envString);
     $('#env-list').prop('title', envTitleString);
@@ -306,7 +329,7 @@ function changeSelectedRevision(newRevision){
     $("#leftMenuEnvVars").attr('href',"/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey + "&versionKey=" + selectedApplicationRevision.hashId);
     $("#envVars").attr('href',"/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey + "&versionKey=" + selectedApplicationRevision.hashId);
     $("#envVarsAdd").attr('href',"/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey + "&versionKey=" + selectedApplicationRevision.hashId);
-    $("#runtimePropCount").text(selectedApplicationRevision.runtimeProperties.length.toString());
+    $("#runtimePropCount").text(selectedApplicationRevision.runtimeProperties.length.toString()-lambdaRuntimePropertyCount);
 
     //Change Tags
     $("#leftMenuTagSet").attr('href',"/appmgt/site/pages/tags.jag?applicationKey=" + applicationKey + "&versionKey=" + selectedApplicationRevision.hashId);
@@ -399,7 +422,7 @@ function putSelectedRevisionToSession(applicationKey, selectedRevision){
 }
 
 function changeRuntimeProps(selectedApplicationRevision){
-    $('#runtimePropCount').html(selectedApplicationRevision.runtimeProperties.length);
+    $('#runtimePropCount').html(selectedApplicationRevision.runtimeProperties.length-lambdaRuntimePropertyCount);
 }
 
 function changeLabels(selectedApplicationRevision){

@@ -54,6 +54,18 @@ jagg.template("home", function(inputs, outputs, jagg) {
     var dataAnalyticsServerUrl = outputs.dataAnalyticsServerUrl;
     var tenantDomain = outputs.tenantDomain;
     var replicaCount = outputs.replicaCount;
+
+    var lambdaRuntimePropertyCount=0;
+    if(application.applicationType=='lambda'){
+        var envArray = selectedApplicationRevision.runtimeProperties;
+            for(var i = 0; i< envArray.length; i++){
+                if((envArray[i].propertyName=="LAMBDA_CLASS" || envArray[i].propertyName== "LAMBDA_FUNCTION_NAME" )){
+                    lambdaRuntimePropertyCount++;
+                }
+        }
+    }
+
+
 %>
 
 <script>
@@ -83,6 +95,7 @@ jagg.template("home", function(inputs, outputs, jagg) {
     var dataAnalyticsServerUrl = "<%=dataAnalyticsServerUrl%>";
     var tenantDomain = "<%=tenantDomain%>";
     var replicaCount = <%=replicaCount%>;
+    var lambdaRuntimePropertyCount = <%=lambdaRuntimePropertyCount%>;
 </script>
 
     <div class="right-pane visible">
@@ -267,7 +280,7 @@ jagg.template("home", function(inputs, outputs, jagg) {
                                         <i class="fw fw-gadget fw-4x"></i>
                                       </div>
                                       <div class="block-number pull-right col-xs-12 col-md-4 col-lg-4">
-                                       <span id="runtimePropCount"><%=selectedApplicationRevision.runtimeProperties.length.toString()%></span>
+                                       <span id="runtimePropCount"><%=(selectedApplicationRevision.runtimeProperties.length-lambdaRuntimePropertyCount).toString()%></span>
                                       </div>
                                       <div class="list-box ellipsis col-xs-12 col-md-5 col-lg-5" id="env-list"></div>
                                       <div class="clearfix"></div>
