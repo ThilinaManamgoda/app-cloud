@@ -232,22 +232,17 @@ jagg.template("application", function (inputs, outputs, jagg) {
 
                 $('#add-application').loadingButton({action:'show'});
                 e.preventDefault();
-                console.log("getting runtime vals");
-                var runtimeProperties = getProperties("env-pane");
-                   console.log("got runtime vals");
-                if(<%=isLambda%>){
-                       console.log("getting lambda runtime vals");
-                    var lambdaRuntimeProperties = getLambdaProperties();
-                       console.log(lambdaRuntimeProperties);
 
+                var runtimeProperties = getProperties("env-pane");
+
+                if(<%=isLambda%>){
+                    var lambdaRuntimeProperties = getLambdaProperties();
                        for(var i=0; i<lambdaRuntimeProperties.length;i++){
                               runtimeProperties.push(lambdaRuntimeProperties[i]);
                        }
 
 
                 }
-                console.log("before stringfy: "+runtimeProperties);
-                console.log("Stringfyyyingg "+  JSON.stringify(runtimeProperties));
                 var tags = getProperties("tags-pane");
                 var formData = new FormData($(this)[0]);
                 var url = $(this).attr("action");
@@ -412,6 +407,11 @@ jagg.template("application", function (inputs, outputs, jagg) {
         function drawProgressWindow(){
             $('#app_creation_progress_modal').modal({ backdrop: 'static', keyboard: false});
             $("#app_creation_progress_modal").show();
+             if (<%=isLambda%>) {
+
+               $("#modal-title").text("Creating the Lambda Function...");
+            }
+
             polleventsID = setInterval(pollEvents, 2000);
         }
 
@@ -429,7 +429,14 @@ jagg.template("application", function (inputs, outputs, jagg) {
                 var result = jQuery.parseJSON(result);
                 if (result.length > 0) {
                     $("#progress_table").html("");
-                    $("#modal-title").text("Creating the " + cloudSpecificApplicationRepresentation.toLowerCase() + "...");
+                    var modalTitle = cloudSpecificApplicationRepresentation.toLowerCase();
+
+                    if (<%=isLambda%>) {
+                          modalTitle = "Lambda Function";
+
+                    }
+
+                     $("#modal-title").text("Creating the " +modalTitle  + "...");
                     $("#app-creation-header-loader").html("");
                 }
                 var table = "<table class='table' style='width:100%; color:black'>" ;
@@ -439,36 +446,62 @@ jagg.template("application", function (inputs, outputs, jagg) {
                     if(event.status == "success"){
                         statusStyle = "success";
                         if (event.name === "Status") {
-                                table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
-                                                "<td>"+event.description+"</td>" +
-                                                "<td><i class=\"fw fw-check\"></i></td></tr>";
+
+                             if (<%=isLambda%>) {
+
+                                table = table + "<tr class='" + statusStyle + "'><td>Lambda Function status</td>" +
+                                                                                "<td>" + event.description + "</td>" +
+                                                                                "<td><i class=\"fw fw-check\"></i></td></tr>";
+                              } else {
+
+                              table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
+                                                                              "<td>" + event.description + "</td>" +
+                                                                              "<td><i class=\"fw fw-check\"></i></td></tr>";
+                              }
+
+
+
                         } else {
+                               if (!(<%=isLambda%>)) {
                                 table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
                                                 "<td></td>" +
                                                 "<td><i class=\"fw fw-check\"></i></td></tr>";
+                                }
                         }
                     } else if (event.status == "failed") {
                         statusStyle = "danger";
                         if (event.name === "Status") {
-                                table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
-                                                "<td>"+event.description+"</td>" +
-                                                "<td><i class=\"fw fw-error\"></i></td></tr>";
+
+                               table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
+                                                                          "<td>" + event.description + "</td>" +
+                                                                          "<td><i class=\"fw fw-error\"></i></td></tr>";
                         } else {
-                                table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
-                                                "<td></td>" +
-                                                "<td><i class=\"fw fw-error\"></i></td></tr>";
+                             if (!(<%=isLambda%>)) {
+                                 table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
+                                                 "<td></td>" +
+                                                 "<td><i class=\"fw fw-error\"></i></td></tr>";
+                             }
                         }
                     } else if (event.status == "pending"){
                         if (event.name === "Status") {
                             statusStyle = "active";
+                             if (<%=isLambda%>) {
+                                     table = table + "<tr class='" + statusStyle + "'><td>Lambda Function  status</td>" +
+                                                                                "<td>" + event.description + "</td>" +
+                                                                                "<td><i class=\"fw fw-loader2 fw-spin\"></i></td></tr>";
+                             } else{
                                 table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
-                                                "<td>"+event.description+"</td>" +
-                                                "<td><i class=\"fw fw-loader2 fw-spin\"></i></td></tr>";
+                                                                                                                "<td>" + event.description + "</td>" +
+                                                                                                                "<td><i class=\"fw fw-loader2 fw-spin\"></i></td></tr>";
+
+                             }
                         } else {
                             statusStyle = "active";
-                                table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
-                                                "<td></td>" +
-                                                "<td><i class=\"fw fw-loader2 fw-spin\"></i></td></tr>";
+                             if (!(<%=isLambda%>)) {
+                                 table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
+                                                 "<td></td>" +
+                                                 "<td><i class=\"fw fw-loader2 fw-spin\"></i></td></tr>";
+                             }
                         }
                     }
                 }
