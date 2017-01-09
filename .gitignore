@@ -28,3 +28,5 @@ modules/deployments/service-loadbalancer/service_loadbalancer
 packs/
 setup/
 modules/setup-scripts/
+modules/jaggeryapps/appmgt/src/dockerfiles/
+modules/jaggeryapps/appmgt/src/tmpUploadedApps/

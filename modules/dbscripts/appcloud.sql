@@ -97,6 +97,7 @@ INSERT INTO `AC_RUNTIME` (`id`, `name`, `image_name`, `tag`, `description`) VALU
 (17, 'OracleJDK 8 + WSO2 MSF4J 2.1.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102');
 
 
+
 -- -----------------------------------------------------
 -- Table `AppCloudDB`.`AC_APPLICATION`
 -- -----------------------------------------------------
@@ -272,8 +273,7 @@ INSERT INTO `AC_APP_TYPE_RUNTIME` (`app_type_id`, `runtime_id`) VALUES
 (1, 14),
 (1, 15),
 (1, 16),
-(2, 17),
-(8, 8);
+(2, 17);
 
 
 
