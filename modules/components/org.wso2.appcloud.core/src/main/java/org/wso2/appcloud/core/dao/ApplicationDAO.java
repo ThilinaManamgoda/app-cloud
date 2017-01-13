@@ -2602,4 +2602,30 @@ public class ApplicationDAO {
         }
         return replicaCount;
     }
+
+    public List<Application> getApplicationsForTenantForAppType(Connection dbConnection, int tenantId, String appType)
+            throws AppCloudException {
+        List<Application> applicationDetailsList = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = dbConnection.prepareStatement(SQLQueryConstants.GET_APPLICATIONS_FOR_TENANT_FOR_APPTYPE);
+            preparedStatement.setInt(1, tenantId);
+            preparedStatement.setString(2,appType);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Application application = new Application();
+                application.setApplicationName(resultSet.getString(SQLQueryConstants.NAME));
+                applicationDetailsList.add(application);
+            }
+            return applicationDetailsList;
+        } catch (SQLException e) {
+            String msg = "Error while getting custom domain details for tenant with tenant Id: " + tenantId + ".";
+            throw new AppCloudException(msg, e);
+        } finally {
+            DBUtil.closeResultSet(resultSet);
+            DBUtil.closePreparedStatement(preparedStatement);
+        }
+    }
 }

@@ -30,3 +30,4 @@ setup/
 modules/setup-scripts/
 modules/jaggeryapps/appmgt/src/dockerfiles/
 modules/jaggeryapps/appmgt/src/tmpUploadedApps/
+modules/components/org.wso2.appcloud.core/cookies

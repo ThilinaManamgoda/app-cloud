@@ -1509,6 +1509,22 @@ public class ApplicationManager {
         }
     }
 
+
+    public static Application[] getApplicationsForTenantForAppType(String appType) throws AppCloudException {
+        Connection dbConnection = DBUtil.getDBConnection();
+       int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+        try {
+            List<Application> applicationDetailsList = ApplicationDAO.getInstance().
+                    getApplicationsForTenantForAppType(dbConnection, tenantId,appType);
+            return applicationDetailsList.toArray(new Application[applicationDetailsList.size()]);
+        } catch (AppCloudException e) {
+            String msg = "Error while getting Application details for tenant with tenant id: " + tenantId + ".";
+            log.error(msg, e);
+            throw new AppCloudException(msg, e);
+        } finally {
+            DBUtil.closeConnection(dbConnection);
+        }
+    }
     /**
      * Method to check if the custom domain is available
      *
