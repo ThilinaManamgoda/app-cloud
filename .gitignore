@@ -28,3 +28,6 @@ modules/deployments/service-loadbalancer/service_loadbalancer
 packs/
 setup/
 modules/setup-scripts/
+modules/components/org.wso2.appcloud.core/cookies
+modules/jaggeryapps/appmgt/src/tmpUploadedApps/
+
