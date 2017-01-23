@@ -94,7 +94,8 @@ INSERT INTO `AC_RUNTIME` (`id`, `name`, `image_name`, `tag`, `description`) VALU
 (14, 'Apache Tomcat 8.5.5 (Ubuntu 16.04/Oracle JDK 1.8.0_112)', 'tomcat', '8.5.5-ubuntu16.04-oracle-jdk1.8.0', 'OS:Ubuntu 16.04, Oracle JDK 1.8.0_112'),
 (15, 'Apache Tomcat 8.5.5 (Alpine 3.4/Open JDK 1.8.0_92)', 'tomcat', '8.5.5-alpine3.4-open-jdk1.8.0', 'OS:Alpine 3.4, Open JDK 1.8.0_92'),
 (16, 'Apache Tomcat 8.5.5 (Ubuntu 16.04/Open JDK 1.8.0_91)', 'tomcat', '8.5.5-ubuntu16.04-open-jdk1.8.0', 'OS:Ubuntu 16.04, Open JDK 1.8.0_91'),
-(17, 'OracleJDK 8 + WSO2 MSF4J 2.1.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102');
+(17, 'OracleJDK 8 + WSO2 MSF4J 2.1.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102')
+(17, 'OracleJDK 8 + LAMBDA', 'lambda', '1.0.0', 'OS:alpine-java, Oracle JDK:8u102');
 
 
 
@@ -268,7 +269,8 @@ INSERT INTO `AC_APP_TYPE_RUNTIME` (`app_type_id`, `runtime_id`) VALUES
 (1, 14),
 (1, 15),
 (1, 16),
-(2, 17);
+(2, 17)
+(8,18);
 
 
 
