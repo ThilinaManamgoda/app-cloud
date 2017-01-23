@@ -305,6 +305,9 @@ jagg.module("application", {
     },
     getMaxReplicaCount:function () {
         return jagg.require(jagg.getModulesDir() + "application/application.jag").getMaxReplicaCount.apply(this, arguments);
+    },
+    getApplicationsForTenantForAppType:function () {
+        return jagg.require(jagg.getModulesDir() + "application/application.jag").getApplicationsForTenantForAppType.apply(this, arguments);
     }
 });
 %>

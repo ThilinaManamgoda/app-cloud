@@ -1981,4 +1981,22 @@ var getReplicaCountForVersion = function (applicationName, versionName) {
          throw e;
     }
 }
+var getApplicationsForTenantForAppType = function (appType){
+
+        var applicationLaunchBaseURL = modManager.getPropertyValue("ApplicationLaunchBaseURL.Public");
+        var applicationDetailsList = ApplicationManager.getApplicationsForTenantForAppType(appType);
+        var urlPrefix = modManager.getTenantDomain(true) + "-";
+        var applicationDetails = [];
+         for (var i = 0; i < applicationDetailsList.length; i++) {
+                var applicationDetail = applicationDetailsList[i];
+                var applicationDetailRes = {};
+                applicationDetailRes.appName = applicationDetail.applicationName;
+                applicationDetailRes.defaultDomainURL = urlPrefix.replace(/\./g, '-')  +
+                              applicationDetail.applicationName.toLowerCase() + "." + applicationLaunchBaseURL;
+                applicationDetails.push(applicationDetailRes);
+         }
+
+         return applicationDetails;
+}
+
 %>

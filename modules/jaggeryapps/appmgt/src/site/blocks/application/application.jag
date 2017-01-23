@@ -736,6 +736,18 @@ var log = new Log();
             response.content = msg;
         }
 
+    } else if (action == "getApplicationsForTenantForAppType") {
+            var appType = request.getParameter("appType");
+             try {
+                 var applicationList = applicationModule.getApplicationsForTenantForAppType(appType);
+                 print(applicationList);
+             } catch (e) {
+                 var msg = "Error while getting Application details for tenant domain: " + modManager.getTenantDomain();
+                 log.error(msg);
+                 log.error(e);
+                 response.status = 500;
+                 response.content = msg;
+              }
     } else {
         throw new Error("No action specified for: " + action);
     }

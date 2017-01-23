@@ -240,6 +240,8 @@ public class SQLQueryConstants {
     public static final String GET_CUSTOM_DOMAIN_DETAILS_FOR_TENANT = "SELECT name, custom_domain " +
             "FROM AC_APPLICATION WHERE tenant_id =?";
 
+    public static final String GET_APPLICATIONS_FOR_TENANT_FOR_APPTYPE = "SELECT name " +
+            "FROM AC_APPLICATION WHERE tenant_id =? AND app_type_id = (SELECT id FROM AC_APP_TYPE WHERE name=?)";
     /* Update Queries */
     public static final String GET_ALL_APPLICATIONS_LIST_WITH_TAG =
             "SELECT app.name as application_name, app.hash_id as hash_id, type.name as app_type_name, " +
