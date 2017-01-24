@@ -35,8 +35,8 @@ jagg.template("leftMenu", function (inputs, outputs, jagg) {
         item = item.toLowerCase();
         return item.substring(0,1).toUpperCase() + item.substring(1);
     }).join(' ');
-
-
+     var isLambda = (outputs.applicationType == 'lambda');
+     var ss=   outputs.applicationType;
     %>
 
  <div class="navbar navbar-secondary">
@@ -74,10 +74,12 @@ jagg.template("leftMenu", function (inputs, outputs, jagg) {
                 <a href="/appmgt/site/pages/runtimeLogs.jag?applicationKey=<%=applicationKey%>&versionKey=<%=versionKey%>">
                 <i class="left-menu-icon fw fw-hdd"></i>Logs</a>
         </li>
+        <%if(!isLambda){%>
         <li id="customUrlPage" style="display: none" class="<% if (pageName == "Custom URL") { %>selected<%}%>">
                 <a href="/appmgt/site/pages/customurl.jag?applicationKey=<%=applicationKey%>">
                 <i class="left-menu-icon fw fw-uri"></i>Custom URL</a>
         </li>
+        <%}%>
         <li class="<% if (pageName == "Settings") { %>selected<%}%>">
                 <a href="/appmgt/site/pages/settings.jag?applicationKey=<%=applicationKey%>">
                 <i class="left-menu-icon fw fw-settings"></i>Settings</a>

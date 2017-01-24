@@ -53,6 +53,8 @@ jagg.block("leftMenu", {
         var cloudTitle = jagg.module("manager").getCloudTypeProperties().cloudTitle;
         var cloudIcon = jagg.module("manager").getCloudTypeProperties().cloudIcon;
 
+        var application = applicationModule.getApplication(applicationKey);
+        var applicationType = application.applicationType;
         return {
             "applicationKey": applicationKey,
             "applicationName": applicationName,
@@ -60,7 +62,8 @@ jagg.block("leftMenu", {
             "versionKey": versionKey,
             "pageName": pageName,
             "cloudTitle" : cloudTitle,
-            "cloudIcon" : cloudIcon
+            "cloudIcon" : cloudIcon,
+            "applicationType": applicationType
         };
     }
 

@@ -26,11 +26,16 @@ function loadEndpointView() {
             if (application.applicationType == "wso2dataservice") {
                 displayEndpointNotloadingMessage();
             }
-            showLoadingEndpointView();
             var deploymentURL = generateDefaultLaunchUrl();
-            loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
-            timerId = setInterval(function () {
+            if(application.applicationType !="lambda"){
+                showLoadingEndpointView();
                 loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
+           }
+
+            timerId = setInterval(function () {
+                if(application.applicationType !="lambda"){
+                  loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
+                }
             }, 3000);
         }
     } else {

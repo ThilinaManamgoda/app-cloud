@@ -126,7 +126,7 @@ jagg.template("home", function(inputs, outputs, jagg) {
                   <h4 class="app-run-time">Runtime: <span id="runtime"><%=selectedApplicationRevision.runtimeName%></span></h4>
                   <h4 class="app-run-time"></h4>
                 <div id="app-description" title="<%=(application.description)?application.description:''%>" class="ellipsis"><%=(application.description)?application.description:''%></div>
-                <%if (defaultAppLaunchURL != null) { %>
+                <%if (defaultAppLaunchURL != null && !isLambda) { %>
                 <div class="app-preview-action-bar" id="custom-url-block">
                     <div class="sec prod-url" id="launch-default-url-block">
                         <% if(selectedApplicationRevision.status==APPLICATION_RUNNING){ %>
@@ -160,17 +160,21 @@ jagg.template("home", function(inputs, outputs, jagg) {
                               %>
                               </ul>
                           </div>
+
+                          <%if(!isLambda) {%>
+
                           <div id="version-url-link" class="version-url" title="<%=selectedApplicationRevision.deploymentURL%>">
+
                           <% if(selectedApplicationRevision.status==APPLICATION_RUNNING){ %>
                             <a id="launch-version-url-a" href="<%=selectedApplicationRevision.deploymentURL%>" target="_blank">
                                 <span><%=selectedApplicationRevision.deploymentURL%></span>
                             </a>
-                          <% } else { %>
                             <a id="launch-version-url-a" target="_blank">
                                 <span><%=selectedApplicationRevision.deploymentURL%></span>
                             </a>
                           <% } %>
                           </div>
+                          <%}%>
                           <div class="sec" id="version-app-launch-block">
                               <%
                                 if(selectedApplicationRevision.status==APPLICATION_RUNNING){

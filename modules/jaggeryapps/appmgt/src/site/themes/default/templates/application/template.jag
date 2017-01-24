@@ -575,6 +575,9 @@ jagg.template("application", function (inputs, outputs, jagg) {
                     validateContent: true,
                     validateApplicationNameChar: true
                 },
+                lambdaClass: {
+                    required: true
+                },
                 applicationRevision: {
                     required: true,
                     validationApplicationRevisionChar: true,

@@ -30,7 +30,7 @@ jagg.block("settings", {
     getOutputs: function (inputs) {
         var applicationModule = jagg.module("application");
         var application = applicationModule.getApplication(inputs.applicationKey);
-
+        var applicationType = application.applicationType;
         var modManager = jagg.module("manager");
         var cloudSpecificApplicationRepresentation = modManager.getCloudTypeProperties().cloudSpecificApplicationRepresentation;
         var privateURL = modManager.getPropertyValue("ApplicationLaunchBaseURL.Private");
@@ -50,7 +50,8 @@ jagg.block("settings", {
             "tenantDomain":tenantDomain,
             "maxReplicaCount":maxReplicaCount,
             "requestIncreaseReplicaLimitURL": requestIncreaseReplicaLimitURL,
-            "cloudSpecificApplicationRepresentation": cloudSpecificApplicationRepresentation
+            "cloudSpecificApplicationRepresentation": cloudSpecificApplicationRepresentation,
+            "applicationType": applicationType
         };
     }
 
