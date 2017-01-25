@@ -27,6 +27,8 @@ jagg.template("envs", function(inputs, outputs, jagg) {
     var cloudSpecificApplicationRepresentation = outputs.cloudSpecificApplicationRepresentation;
     var allDBInfo = outputs.allDBInfo;
     var noOfDbs = outputs.noOfDbs;
+    var applicationType = outputs.applicationType;
+    var isLambda = (applicationType == 'lambda');
 %>
 
       <!-- Bootstrap -->
@@ -80,40 +82,46 @@ $(document).ready(function() {
 
     }, function (result) {
         var parsedResult = JSON.parse(result);
-        if(parsedResult.length == 0 || ){
+        var onlyLamdaEnv = (parsedResult.length==(isLambdaFuncDefined(parsedResult)? 2:1));
+        
+        if(parsedResult.length == 0 || (<%=isLambda%> && onlyLamdaEnv )){
             $(".env-list").prepend(
                 '<div class="row"><div id="push"></div><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">No environment variables are created yet. </div></div>');
         } else {
             for (var i = 0; i < parsedResult.length; i++) {
                 var valueControl;
-                if(noOfDbs == 0){
-                    valueControl = '<input type="text" class="form-control element-value-holder" id="value" value="' + parsedResult[i].value  + '">';
-                } else {
-                    valueControl = '<select name="value" class="form-control select2 element-value-holder" disabled><option>' + parsedResult[i].value + '</option></select>';
-                }
-                $(".env-list").prepend(
-                    '<div class="form-inline custom-env-class-for-demo">' +
-                    '<div class="form-group">' +
-                    '<label class="sr-only" for="key">Key</label>' +
-                    '<input type="text" class="form-control env-key element-key-holder" placeholder="Key" readonly value="' + parsedResult[i].key + '">' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                    '<label class="sr-only" for="value">Value</label>' +
-                    '<select name="value" class="form-control select2 element-value-holder" disabled><option>' + parsedResult[i].value + '</option></select>' +
-                    '</div>' +
-                    '<div class="form-group edit-key-values">' +
-                    '<span class="fw-stack fw-lg edit-env">' +
-                    '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
-                    '<i id="editIcon" class="fw  fw-edit fw-stack-1x fw-inverse"></i>' +
-                    '<i id="saveIcon" class="fw  fw-save fw-stack-1x fw-inverse" style="display: none"></i>' +
-                    '</span>' +
-                    '<span class="fw-stack fw-lg">' +
-                    '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
-                    '<i class="fw fw-delete fw-stack-1x fw-inverse"></i>' +
-                    '</span>' +
-                    '</div>' +
-                    '</div>');
+               if(!isLambdaEnv(parsedResult[i].key)){
+
+                   if(noOfDbs == 0){
+                       valueControl = '<input type="text" class="form-control element-value-holder" id="value" value="' + parsedResult[i].value  + '">';
+                   } else {
+                       valueControl = '<select name="value" class="form-control select2 element-value-holder" disabled><option>' + parsedResult[i].value + '</option></select>';
+                   }
+                   $(".env-list").prepend(
+                       '<div class="form-inline custom-env-class-for-demo">' +
+                       '<div class="form-group">' +
+                       '<label class="sr-only" for="key">Key</label>' +
+                       '<input type="text" class="form-control env-key element-key-holder" placeholder="Key" readonly value="' + parsedResult[i].key + '">' +
+                       '</div>' +
+                       '<div class="form-group">' +
+                       '<label class="sr-only" for="value">Value</label>' +
+                       '<select name="value" class="form-control select2 element-value-holder" disabled><option>' + parsedResult[i].value + '</option></select>' +
+                       '</div>' +
+                       '<div class="form-group edit-key-values">' +
+                       '<span class="fw-stack fw-lg edit-env">' +
+                       '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
+                       '<i id="editIcon" class="fw  fw-edit fw-stack-1x fw-inverse"></i>' +
+                       '<i id="saveIcon" class="fw  fw-save fw-stack-1x fw-inverse" style="display: none"></i>' +
+                       '</span>' +
+                       '<span class="fw-stack fw-lg">' +
+                       '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
+                       '<i class="fw fw-delete fw-stack-1x fw-inverse"></i>' +
+                       '</span>' +
+                       '</div>' +
+                       '</div>');
+               }
             }
+
         }
 
         $(".add-env").click(function() {
@@ -336,6 +344,18 @@ $(document).ready(function() {
             });
         });
     });
+    function isLambdaEnv(variable){
+        return (variable=='LAMBDA_CLASS'|| variable=='LAMBDA_FUNCTION_NAME');
+    }
+    function isLambdaFuncDefined(array){
+
+        for(var i=0 ;i< array.length;i++){
+
+                if(array[i].key=='LAMBDA_FUNCTION_NAME') return true;
+        }
+
+        return false;
+    }
 
     function postEnvAddUpdate(element){
         element.parent().parent().find('.fw-cancel').removeClass('fw-cancel').addClass('fw-delete');

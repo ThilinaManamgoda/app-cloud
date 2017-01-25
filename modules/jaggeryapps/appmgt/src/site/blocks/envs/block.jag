@@ -33,7 +33,7 @@ jagg.block("envs", {
         var application = applicationModule.getApplication(inputs.applicationKey);
         var allDBInfo = databaseModule.getAllDatabasesInfo();
         var noOfDbs = allDBInfo.length;
-
+        var applicationType=application.applicationType;
         if (!selectedRevision && application.defaultVersion) {
             selectedRevision = application.defaultVersion;
         }
@@ -43,7 +43,8 @@ jagg.block("envs", {
             "selectedRevision": selectedRevision,
             "cloudSpecificApplicationRepresentation" : cloudSpecificApplicationRepresentation,
             "allDBInfo": allDBInfo,
-            "noOfDbs": noOfDbs
+            "noOfDbs": noOfDbs,
+            "applicationType": applicationType
         };
     }
 

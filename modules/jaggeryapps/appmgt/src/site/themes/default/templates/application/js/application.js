@@ -208,7 +208,6 @@ function getProperties(elementId){
 }
 
 function getLambdaProperties(){
-console.log("get Lambda props");
     var propArray = [];
     var classProperty = {};
     classProperty["key"] = "LAMBDA_CLASS";
