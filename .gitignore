@@ -23,3 +23,9 @@ target
 
 #service_loadbalancer binary
 modules/deployments/service-loadbalancer/service_loadbalancer
+modules/components/org.wso2.appcloud.core/cookies
+modules/jaggeryapps/appmgt/src/tmpUploadedApps/
+modules/setup-scripts/patches/
+packs/
+setup/
+
