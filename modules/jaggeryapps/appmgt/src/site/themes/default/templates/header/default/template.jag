@@ -150,25 +150,6 @@ $zopim(function () {
                            <i class="fw fw-api fa-3x"></i>
                            <div class="cloud-name">API Cloud</div>
                        </a>
-                        <%
-                            if (jagg.getSelectedCloud() == INTEGRATION_CLOUD) {
-                        %>
-                        <a class="cloud-block" href="<%=appCloudURL%>" target="_blank">
-                            <i class="fa fa-3x fa-cubes"></i>
-                            <div class="cloud-name"> App Cloud</div>
-                        </a>
-                        <%
-                            } else {
-                        %>
-                        <!--to-do: need to fix this properly when integration cloud available to public-->
-                        <!--a class="cloud-block" href="<%=integrationCloudURL%>" target="_blank">
-                            <i class="fw fw-3x fw-service"></i>
-                            <div class="cloud-name"> Integration Cloud</div>
-                        </a-->
-                        <%
-                            }
-                        %>
-
                        <div class="clearfix"></div> <!-- to make seperate -->
                    </div>
                    <div class="cloud-actions">
@@ -185,7 +166,7 @@ $zopim(function () {
                             <i class="fa fa-3x  fa-database"></i>
                             <div class="cloud-name">Databases</div>
                         </a>
-                       <a id="customUrlBlock" style="display: none;" class="cloud-block-invert" href="<%=customUrlSettingsPageUrl%>?backUrl=<%=appCloudURL%>">
+                       <a id="customUrlBlock" style="display: none;" class="cloud-block-invert" href="<%=customUrlSettingsPageUrl%>?backUrl=<%=integrationCloudURL%>&cloud-type=integration_cloud">
                             <i class="fa fa-3x  fa-link"></i>
                             <div class="cloud-name">CustomUrl</div>
                        </a>
@@ -221,6 +202,12 @@ $zopim(function () {
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('js/select2-4.0.0/select2.min.js'))%>"></script>
 <script src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('js/custom/custom.js'))%>"></script>
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('js/custom/validator.js'))%>"></script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
 <script>
     var hasCustomURLSettingsAccess = "<%=hasCustomURLSettingsAccess%>";
