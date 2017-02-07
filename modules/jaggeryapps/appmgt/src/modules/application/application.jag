@@ -440,17 +440,26 @@ var createDockerFile = function (applicationName, versionName, appTypeName, runt
         }
         var dockerTemplateFilePath = modManager.getPropertyValue(PROPERTY_APPMGT_DEPLOYMENT_DIR_PATH) + "/" + "dockerfiles";
         var uploadArtifactTmpName;
-        var checkFileExtZIP = isFileExtZIP(uploadedFileName);
-        if (checkFileExtZIP && !artifactUrl) {
-            var fileName = uploadedFileName.substring(0, uploadedFileName.lastIndexOf("."));
-            uploadArtifactTmpName = fileName + FILE_EXTENSTION_ALTER;
-        } else {
-            uploadArtifactTmpName = uploadedFileName;
-        }
+        var artifactNameWithoutExtension ;
+
         var dockerFilePropertyMap = new java.util.HashMap();
-        var artifactNameWithoutExtension = uploadArtifactTmpName.substring(0, uploadArtifactTmpName.lastIndexOf("."));
-        dockerFilePropertyMap.put("ARTIFACT_NAME", uploadArtifactTmpName);
-        dockerFilePropertyMap.put("ARTIFACT_DIR", artifactNameWithoutExtension);
+
+        if(appTypeName!="wso2esb"){
+
+            var checkFileExtZIP = isFileExtZIP(uploadedFileName);
+            if (checkFileExtZIP && !artifactUrl) {
+                var fileName = uploadedFileName.substring(0, uploadedFileName.lastIndexOf("."));
+                uploadArtifactTmpName = fileName + FILE_EXTENSTION_ALTER;
+            } else {
+                uploadArtifactTmpName = uploadedFileName;
+            }
+            artifactNameWithoutExtension = uploadArtifactTmpName.substring(0, uploadArtifactTmpName.lastIndexOf("."));
+
+
+            dockerFilePropertyMap.put("ARTIFACT_NAME", uploadArtifactTmpName);
+            dockerFilePropertyMap.put("ARTIFACT_DIR", artifactNameWithoutExtension);
+        }
+
         dockerFilePropertyMap.put("HOST_NAME", hostName);
         dockerFilePropertyMap.put("ARTIFACT_URL", artifactUrl);
         dockerFilePropertyMap.put("VAL_TOTAL_MEMORY", conSpecMemory);
