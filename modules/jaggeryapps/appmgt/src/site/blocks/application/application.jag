@@ -25,6 +25,10 @@ var applicationModule = jagg.module("application");
 var gitHubAppModule = jagg.module("application/git");
 var modManager = jagg.module("manager");
 var log = new Log();
+var appTypePropertyConfPath = jagg.getAppTypePropertyConfFilePath();
+var parsedObject = parse(appTypePropertyConfPath);
+var appTypesProperties = require(parsedObject);
+
 (function(){
     if(action == "uploadExistingArchive"){
         var uploadedArtifact = request.getFile(request.getParameter("fileParamName"));
@@ -57,6 +61,7 @@ var log = new Log();
         var replicas = 1;
         var runtimeId = request.getParameter("runtime");
         var exposureLevel = "public";
+
         if (validateRequiredAndNumber("runtime", runtimeId)) {return;}
 
         var isNewVersion = request.getParameter("isNewVersion");
@@ -126,7 +131,11 @@ var log = new Log();
         var uploadedFileName = request.getParameter("uploadedFileName");
 
         var appIcon = request.getFile("appIcon");
-        var uploadedArtifact = request.getFile(request.getParameter("fileParamName"));
+        var appType = appTypesProperties[appTypeName];
+        var isMultiArtifact = appType.multiArtifact;
+       var uploadedArtifact =null;
+       if(!isMultiArtifact)request.getFile(request.getParameter("fileParamName"));
+
 
         var isFileAttached = request.getParameter("isFileAttached");
         if (isFileAttached == 'true') {
