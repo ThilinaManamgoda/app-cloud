@@ -39,7 +39,9 @@ var Util = Packages.org.wso2.appcloud.core.Util;
 var ResourceQuotaLimit = Packages.org.wso2.appcloud.provisioning.runtime.beans.ResourceQuotaLimit;
 var List = Packages.java.util.List;
 var Arrays = Packages.java.util.Arrays;
-
+var appTypePropertyConfPath = jagg.getAppTypePropertyConfFilePath();
+var parsedObject = parse(appTypePropertyConfPath);
+var appTypesProperties = require(parsedObject);
 
 /**
  * Add an application object
@@ -430,7 +432,8 @@ var createDockerFile = function (applicationName, versionName, appTypeName, runt
         log.debug("Start creating Docker file for version:" + versionHashId);
     }
     var absFileUploadedPath;
-
+    var appType = appTypesProperties[appTypeName];
+    var isMultiArtifact = appType.multiArtifact;
     try {
         var fileUploadPath = constructFileUploadPath(versionHashId);
         var absFileUploadedPath = modManager.getPropertyValue(PROPERTY_APPMGT_DEPLOYMENT_DIR_PATH) + fileUploadPath;
@@ -439,8 +442,11 @@ var createDockerFile = function (applicationName, versionName, appTypeName, runt
             log.debug("Docker file path for deployment: " + dockerFilePath);
         }
         var dockerTemplateFilePath = modManager.getPropertyValue(PROPERTY_APPMGT_DEPLOYMENT_DIR_PATH) + "/" + "dockerfiles";
+
+        var checkFileExtZIP = false;
+        if(!isMultiArtifact) checkFileExtZIP = isFileExtZIP(uploadedFileName);
+
         var uploadArtifactTmpName;
-        var checkFileExtZIP = isFileExtZIP(uploadedFileName);
         if (checkFileExtZIP && !artifactUrl) {
             var fileName = uploadedFileName.substring(0, uploadedFileName.lastIndexOf("."));
             uploadArtifactTmpName = fileName + FILE_EXTENSTION_ALTER;
@@ -449,6 +455,7 @@ var createDockerFile = function (applicationName, versionName, appTypeName, runt
         }
         var dockerFilePropertyMap = new java.util.HashMap();
         var artifactNameWithoutExtension = uploadArtifactTmpName.substring(0, uploadArtifactTmpName.lastIndexOf("."));
+
         dockerFilePropertyMap.put("ARTIFACT_NAME", uploadArtifactTmpName);
         dockerFilePropertyMap.put("ARTIFACT_DIR", artifactNameWithoutExtension);
         dockerFilePropertyMap.put("HOST_NAME", hostName);

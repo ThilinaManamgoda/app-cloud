@@ -27,7 +27,7 @@ var modManager = jagg.module("manager");
 var log = new Log();
 (function(){
     if(action == "uploadExistingArchive"){
-        var uploadedArtifact = request.getFile("fileupload");
+        var uploadedArtifact = request.getFile(request.getParameter("fileParamName"));
         var applicationName = request.getParameter("applicationName");
         var appTypeName = request.getParameter("appTypeName");
         var applicationRevision = request.getParameter("applicationRevision");
@@ -126,7 +126,7 @@ var log = new Log();
         var uploadedFileName = request.getParameter("uploadedFileName");
 
         var appIcon = request.getFile("appIcon");
-        var uploadedArtifact = request.getFile("fileupload");
+        var uploadedArtifact = request.getFile(request.getParameter("fileParamName"));
 
         var isFileAttached = request.getParameter("isFileAttached");
         if (isFileAttached == 'true') {
