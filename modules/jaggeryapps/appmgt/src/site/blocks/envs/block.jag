@@ -33,7 +33,7 @@ jagg.block("envs", {
         var application = applicationModule.getApplication(inputs.applicationKey);
         var allDBInfo = databaseModule.getAllDatabasesInfo();
         var noOfDbs = allDBInfo.length;
-        var applicationType=application.applicationType;
+        var applicationType = application.applicationType;
         if (!selectedRevision && application.defaultVersion) {
             selectedRevision = application.defaultVersion;
         }

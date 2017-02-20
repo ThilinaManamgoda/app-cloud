@@ -528,8 +528,8 @@ var log = new Log();
     } else if (action == "deleteTag"){
         var versionKey = request.getParameter("versionKey");
         var key = request.getParameter("key");
-
         if (applicationModule.isTagExist(versionKey, key)) {
+
             applicationModule.deleteTag(versionKey, key);
             response.status = 200;
             response.content = "Tag successfully deleted.";

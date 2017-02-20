@@ -55,17 +55,25 @@ jagg.template("home", function(inputs, outputs, jagg) {
     var tenantDomain = outputs.tenantDomain;
     var replicaCount = outputs.replicaCount;
     var isLambda = (application.applicationType == 'lambda');
-    var lambdaRuntimePropertyCount=0;
-    if(isLambda){
-          lambdaRuntimePropertyCount++;
+    var lambdaRuntimePropertyCount = 0;
+    var lambdaTagsCount = 0;
+    if (isLambda) {
+          lambdaRuntimePropertyCount = 4; // Lambda has Default 4 Environment variables
           var envArray = selectedApplicationRevision.runtimeProperties;
           for(var i = 0; i< envArray.length; i++){
-              if(envArray[i].propertyName == "LAMBDA_FUNCTION_NAME"){
-//                  lambdaRuntimePropertyCount++;
+              if (envArray[i].propertyName == "LAMBDA_FUNCTION_NAME") {
+                  lambdaRuntimePropertyCount++;
+                  break;
               }
           }
+          var tagsArray = selectedApplicationRevision.tags;
+          for(var i = 0; i< tagsArray.length; i++){
+             if (tagsArray[i].labelName == "lambdaEvent") {
+                lambdaTagsCount++;
+                break;
+             }
+           }
     }
-
 %>
 
 <script>
@@ -95,6 +103,7 @@ jagg.template("home", function(inputs, outputs, jagg) {
     var dataAnalyticsServerUrl = "<%=dataAnalyticsServerUrl%>";
     var tenantDomain = "<%=tenantDomain%>";
     var replicaCount = <%=replicaCount%>;
+
 </script>
 
     <div class="right-pane visible">
@@ -296,7 +305,7 @@ jagg.template("home", function(inputs, outputs, jagg) {
                                         <i class="fw fw-tag fw-4x"></i>
                                       </div>
                                       <div class="block-number pull-right col-xs-12 col-md-4 col-lg-4">
-                                       <span id="tagCount"><%=selectedApplicationRevision.tags.length.toString()%></span>
+                                       <span id="tagCount"><%=(selectedApplicationRevision.tags.length-lambdaTagsCount).toString()%></span>
                                       </div>
                                       <div class="list-box ellipsis col-xs-12 col-md-5 col-lg-5" id="tag-list"></div>
                                       <div class="clearfix"></div>

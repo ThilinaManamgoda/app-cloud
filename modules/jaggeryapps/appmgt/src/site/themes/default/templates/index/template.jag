@@ -310,7 +310,6 @@ jagg.template("index", function(inputs, outputs, jagg) {
     <% if (applications.length > 0 ) { %>
         <div class="row row-centered app-sort-bar">
             <div class="col-centered col-md-5 search">
-
                 <div class="input-group">
                     <input type="text" class="form-control" id="search-apps" placeholder="Search applications">
                     <div class="input-group-btn">

@@ -82,15 +82,14 @@ $(document).ready(function() {
 
     }, function (result) {
         var parsedResult = JSON.parse(result);
-        var onlyLamdaEnv = (parsedResult.length==(isLambdaFuncDefined(parsedResult)? 2:1));
-        
-        if(parsedResult.length == 0 || (<%=isLambda%> && onlyLamdaEnv )){
+        var onlyLamdaEnv = (parsedResult.length == (isLambdaFuncDefined(parsedResult) ? 5:4));
+        if (parsedResult.length == 0 || onlyLamdaEnv) {
             $(".env-list").prepend(
                 '<div class="row"><div id="push"></div><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">No environment variables are created yet. </div></div>');
         } else {
             for (var i = 0; i < parsedResult.length; i++) {
                 var valueControl;
-               if(!isLambdaEnv(parsedResult[i].key)){
+               if (!isLambdaEnv(parsedResult[i].key)) {
 
                    if(noOfDbs == 0){
                        valueControl = '<input type="text" class="form-control element-value-holder" id="value" value="' + parsedResult[i].value  + '">';
@@ -345,15 +344,14 @@ $(document).ready(function() {
         });
     });
     function isLambdaEnv(variable){
-        return (variable=='LAMBDA_CLASS'|| variable=='LAMBDA_FUNCTION_NAME');
+        return (variable=='LAMBDA_CLASS'|| variable=='LAMBDA_FUNCTION_NAME'|| variable == "LAMBDA_APPLICATION_NAME" || variable == "LAMBDA_EVENT" || variable == "TENANT" );
     }
     function isLambdaFuncDefined(array){
-
-        for(var i=0 ;i< array.length;i++){
-
-                if(array[i].key=='LAMBDA_FUNCTION_NAME') return true;
+        if (<%=isLambda%>) {
+            for(var i=0 ;i< array.length;i++){
+                    if(array[i].key == 'LAMBDA_FUNCTION_NAME') return true;
+            }
         }
-
         return false;
     }
 

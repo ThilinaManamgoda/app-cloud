@@ -207,18 +207,36 @@ function getProperties(elementId){
     return propArray;
 }
 
-function getLambdaProperties(){
+function getLambdaRuntimeProperties(){
     var propArray = [];
     var classProperty = {};
     classProperty["key"] = "LAMBDA_CLASS";
     classProperty["value"] = $('#lambdaClass').val();
     propArray.push(classProperty);
-    if($('#functionName').val()){
+
+    var applicationName = {};
+    applicationName["key"] = "LAMBDA_APPLICATION_NAME";
+    applicationName["value"] = $("#applicationName").val();
+    propArray.push(applicationName);
+
+    var tenant = {};
+    tenant["key"] = "TENANT";
+    tenant["value"] = loggedInUserName;
+    propArray.push(tenant);
+
+    if ($('#lambdaevent').val()) {
+        var LambdaEvent = {};
+        LambdaEvent["key"] = "LAMBDA_EVENT";
+        LambdaEvent["value"] = $('#lambdaevent').val();
+        propArray.push(LambdaEvent);
+    }
+
+    if ($('#functionName').val()) {
         var functionProperty = {};
         functionProperty["key"] = "LAMBDA_FUNCTION_NAME";
         functionProperty["value"] =  $('#functionName').val();
         propArray.push(functionProperty);
     }
-    console.log(propArray);
+
     return propArray;
 }

@@ -28,9 +28,11 @@ jagg.block("apptype/select", {
         var parsedObject = parse(appTypePropertyConfPath);
         var appTypesProperties = require(parsedObject);
         var manager = jagg.module("manager");
+        var log = new Log();
         if (appTypes.length > 0) {
             //Adding css properties to apptype objects
             for (var index in appTypes) {
+                log.info(appTypes[index]);
                 appTypes[index].cssProperties = appTypesProperties[appTypes[index].name];
                 appTypes[index].docUrl = manager.getPropertyValue(appTypes[index].name + DOC_URL);
             }

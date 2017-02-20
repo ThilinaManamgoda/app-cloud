@@ -59,7 +59,14 @@ jagg.block("application", {
                 '&subject=' + requestMoreAppsSubjectMessage;
         var allDBInfo = databaseModule.getAllDatabasesInfo();
         var noOfDbs = allDBInfo.length;
-
+        var user = jagg.getUser();
+        var userEmailAddress = modManager.getEmailAddressForUser(user);
+        var loggedInUserName;
+        if (userEmailAddress == null) {
+            loggedInUserName = user;
+        } else {
+            loggedInUserName = userEmailAddress;
+        }
         return {
             "runtimes" : runtimes,
             "appType" : appType,
@@ -76,7 +83,8 @@ jagg.block("application", {
             "requestNewAppTypeURL" : requestNewAppTypeURL,
             "requestMoreAppseURL" : requestMoreAppseURL,
             "allDBInfo": allDBInfo,
-            "noOfDbs": noOfDbs
+            "noOfDbs": noOfDbs,
+            "loggedInUserName": loggedInUserName
         };
     }
 });

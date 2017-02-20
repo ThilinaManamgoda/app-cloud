@@ -212,14 +212,20 @@ function listTags(){
     }
     var tagString = '';
     var tagTitleString = '';
-    for(var i = 0; i < tagListLength; i++){
+    var maximumTags = 3;
+    for (var i = 0; i < tagListLength; i++) {
         if(i >= 3){
             break;
         }
-        tagString += tags[i].labelName + " : " + tags[i].labelValue + "</br>";
-        tagTitleString += tags[i].labelName + " : " + tags[i].labelValue + "\n";
+        isLambdaTag = (tags[i].labelName == "lambdaEvent");
+        if (!isLambdaTag) {
+            tagString += tags[i].labelName + " : " + tags[i].labelValue + "</br>";
+            tagTitleString += tags[i].labelName + " : " + tags[i].labelValue + "\n";
+        } else {
+            maximumTags++;
+        }
     }
-    if(tagListLength > 3) {
+    if (tagListLength > maximumTags) {
         tagString += "</br><a class='view-tag' href='/appmgt/site/pages/tags.jag?applicationKey=" + applicationKey
                              + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All Tags</a>";
     }
@@ -237,42 +243,27 @@ function listEnvs(){
     var envString = '';
     var envTitleString = '';
     var isLambdaRuntimeProperty;
-    if(application.applicationType=='lambda'){
+    var maximumEnvVals = 3;
 
-     for(var i = 0; i < envListLength; i++){
-       isLambdaRuntimeProperty = (envs[i].propertyName=="LAMBDA_CLASS" || envs[i].propertyName== "LAMBDA_FUNCTION_NAME" );
-
-            if(i >= 5){
-                break;
-            }
-            if(!isLambdaRuntimeProperty){
-                     envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
-                     envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
-            }
-
-        }
-        if(envListLength > 5) {
-            envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
-                                 + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
-        }
-    }else{
-         for(var i = 0; i < envListLength; i++){
-            if(i >= 3){
-                break;
-            }
-
-            envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
-            envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
-         }
-        if(envListLength > 3) {
-            envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
-                                  + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
-        }
-    }
-
-
-    $('#env-list').html(envString);
-    $('#env-list').prop('title', envTitleString);
+     for (var i = 0; i < envListLength; i++) {
+           if (i >= 3) {
+             break;
+           }
+           var propertyName = envs[i].propertyName;
+           isLambdaRuntimeProperty = (propertyName == "LAMBDA_CLASS" || propertyName == "LAMBDA_FUNCTION_NAME" || propertyName == "LAMBDA_APPLICATION_NAME" || propertyName == "LAMBDA_EVENT" || propertyName == "TENANT");
+           if (!isLambdaRuntimeProperty) {
+                 envString += envs[i].propertyName + " : " + envs[i].propertyValue + "</br>";
+                 envTitleString += envs[i].propertyName + " : " + envs[i].propertyValue + "\n";
+           } else {
+                 maximumEnvVals++;
+           }
+     }
+     if (envListLength > maximumEnvVals) {
+        envString += "</br><a class='view-tag' href='/appmgt/site/pages/envs.jag?applicationKey=" + applicationKey
+                             + "&versionKey=" + selectedApplicationRevision.hashId + "' title='View All envs'>View All envs</a>";
+     }
+     $('#env-list').html(envString);
+     $('#env-list').prop('title', envTitleString);
 }
 
 // Icon initialization

@@ -25,7 +25,8 @@ jagg.template("tags", function(inputs, outputs, jagg) {
     var applicationRevision = request.getParameter("revision");
     var selectedRevision = outputs.selectedRevision;
     var cloudSpecificApplicationRepresentation = outputs.cloudSpecificApplicationRepresentation;
-
+    var applicationType = outputs.applicationType;
+    var isLambda = (applicationType == 'lambda');
     %>
      <!-- Bootstrap -->
       <link rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('css/bootstrap-3.2.0/bootstrap.min.css'))%>">
@@ -74,33 +75,36 @@ $(document).ready(function () {
 
     }, function (result) {
         var parsedResult = JSON.parse(result);
-        if(parsedResult.length == 0){
+        var isNoTagsCreated =  (parsedResult.length == 0) || (parsedResult.length == 1 && isLambdaEventTagDefined(parsedResult));
+        if (isNoTagsCreated) {
             $(".tag-list").prepend(
                 '<div class="row"><div id="push"></div><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">No tags are created yet. </div></div>');
         } else {
             for (var i = 0; i < parsedResult.length; i++) {
-                $(".tag-list").prepend(
-                    '<div class="form-inline  property-seperator custom-env-class-for-demo">' +
-                    '<div class="form-group">' +
-                    '<label class="sr-only" for="key">Key</label>' +
-                    '<input type="text" class="form-control tag-key" id="key" placeholder="Key" readonly value="' + parsedResult[i].key + '">' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                    '<label class="sr-only" for="value">Value</label>' +
-                    '<input type="text" class="form-control tag-value" id="value" placeholder="Value" readonly value="' + parsedResult[i].value + '">' +
-                    '</div>' +
-                    '<div class="form-group edit-key-values">' +
-                    '<span class="fw-stack fw-lg">' +
-                    '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
-                    '<i id="editIcon" class="fw  fw-edit fw-stack-1x fw-inverse"></i>' +
-                    '<i id="saveIcon" class="fw  fw-save fw-stack-1x fw-inverse" style="display: none"></i>' +
-                    '</span>' +
-                    '<span class="fw-stack fw-lg">' +
-                    '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
-                    '<i class="fw fw-delete fw-stack-1x fw-inverse"></i>' +
-                    '</span>' +
-                    '</div>' +
-                    '</div>');
+               if ((!<%=isLambda%>) || (!isLambdaTag(parsedResult[i]))) {
+                    $(".tag-list").prepend(
+                        '<div class="form-inline  property-seperator custom-env-class-for-demo">' +
+                        '<div class="form-group">' +
+                        '<label class="sr-only" for="key">Key</label>' +
+                        '<input type="text" class="form-control tag-key" id="key" placeholder="Key" readonly value="' + parsedResult[i].key + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label class="sr-only" for="value">Value</label>' +
+                        '<input type="text" class="form-control tag-value" id="value" placeholder="Value" readonly value="' + parsedResult[i].value + '">' +
+                        '</div>' +
+                        '<div class="form-group edit-key-values">' +
+                        '<span class="fw-stack fw-lg">' +
+                        '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
+                        '<i id="editIcon" class="fw  fw-edit fw-stack-1x fw-inverse"></i>' +
+                        '<i id="saveIcon" class="fw  fw-save fw-stack-1x fw-inverse" style="display: none"></i>' +
+                        '</span>' +
+                        '<span class="fw-stack fw-lg">' +
+                        '<i class="fw fw-circle-outline fw-stack-2x fw-inverse"></i>' +
+                        '<i class="fw fw-delete fw-stack-1x fw-inverse"></i>' +
+                        '</span>' +
+                        '</div>' +
+                        '</div>');
+               }
             }
         }
 
@@ -199,7 +203,21 @@ $(document).ready(function () {
             });
         });
     });
-
+    function isLambdaTag (val) {
+       return (val.key == 'lambdaEvent');
+    }
+    function isLambdaEventTagDefined(array){
+        console.log(<%=isLambda%>);
+        if (<%=isLambda%>) {
+            for (var i = 0; i< array.length; i++) {
+                console.log(array[i].key);
+                if (isLambdaTag(array[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     function postAddUpdate(element){
         element.parent().find('#saveIcon').hide();
         element.parent().find('#editIcon').show();

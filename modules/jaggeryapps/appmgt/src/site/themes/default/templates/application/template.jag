@@ -48,6 +48,7 @@ jagg.template("application", function (inputs, outputs, jagg) {
         var allDBInfo = outputs.allDBInfo;
         var noOfDbs = outputs.noOfDbs;
         var isLambda = (appTypeName == 'lambda');
+        var loggedInUserName  = outputs.loggedInUserName;
     %>
 
       <link rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('css/bootstrap-3.2.0/bootstrap.min.css'))%>">
@@ -99,7 +100,7 @@ jagg.template("application", function (inputs, outputs, jagg) {
     var envKeyRegex = new RegExp("<%=ENV_KEY_REGEX%>");
     var applicationList = <%=applications%>;
     var versionList = "<%=versionList%>";
-
+    var loggedInUserName = "<%=loggedInUserName%>";
     $(document).ready(function(){
             if (newVersion == "true") {
                 isNewVersion = true;
@@ -234,16 +235,20 @@ jagg.template("application", function (inputs, outputs, jagg) {
                 e.preventDefault();
 
                 var runtimeProperties = getProperties("env-pane");
-
-                if(<%=isLambda%>){
-                    var lambdaRuntimeProperties = getLambdaProperties();
-                       for(var i=0; i<lambdaRuntimeProperties.length;i++){
-                              runtimeProperties.push(lambdaRuntimeProperties[i]);
-                       }
-
-
-                }
                 var tags = getProperties("tags-pane");
+
+                if (<%=isLambda%>) {
+                    var lambdaRuntimeProperties = getLambdaRuntimeProperties();
+                    for(var i=0; i<lambdaRuntimeProperties.length;i++){
+                          runtimeProperties.push(lambdaRuntimeProperties[i]);
+                    }
+                    if ($('#lambdaevent').val()) {
+                        var lambdaEventTag = {};
+                        lambdaEventTag["key"] = "lambdaEvent";
+                        lambdaEventTag["value"] = $('#lambdaevent').val();
+                        tags.push(lambdaEventTag);
+                    }
+                }
                 var formData = new FormData($(this)[0]);
                 var url = $(this).attr("action");
 
@@ -408,7 +413,6 @@ jagg.template("application", function (inputs, outputs, jagg) {
             $('#app_creation_progress_modal').modal({ backdrop: 'static', keyboard: false});
             $("#app_creation_progress_modal").show();
              if (<%=isLambda%>) {
-
                $("#modal-title").text("Creating the Lambda Function...");
             }
 
@@ -433,10 +437,9 @@ jagg.template("application", function (inputs, outputs, jagg) {
 
                     if (<%=isLambda%>) {
                           modalTitle = "Lambda Function";
-
                     }
 
-                     $("#modal-title").text("Creating the " +modalTitle  + "...");
+                    $("#modal-title").text("Creating the " +modalTitle  + "...");
                     $("#app-creation-header-loader").html("");
                 }
                 var table = "<table class='table' style='width:100%; color:black'>" ;
@@ -444,9 +447,10 @@ jagg.template("application", function (inputs, outputs, jagg) {
                     var statusStyle;
                     var event = result[i];
                     if(event.status == "success"){
+                        console.log("success");
                         statusStyle = "success";
                         if (event.name === "Status") {
-
+                            console.log("Status");
                              if (<%=isLambda%>) {
 
                                 table = table + "<tr class='" + statusStyle + "'><td>Lambda Function status</td>" +
@@ -462,6 +466,7 @@ jagg.template("application", function (inputs, outputs, jagg) {
 
 
                         } else {
+                            console.log("not Status :");
                                if (!(<%=isLambda%>)) {
                                 table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
                                                 "<td></td>" +
@@ -469,13 +474,15 @@ jagg.template("application", function (inputs, outputs, jagg) {
                                 }
                         }
                     } else if (event.status == "failed") {
+                    console.log("Failed");
                         statusStyle = "danger";
                         if (event.name === "Status") {
-
+                            console.log("falied-Status");
                                table = table + "<tr class='" + statusStyle + "'><td>Container status</td>" +
                                                                           "<td>" + event.description + "</td>" +
                                                                           "<td><i class=\"fw fw-error\"></i></td></tr>";
                         } else {
+                            console.log("failed-not-Status");
                              if (!(<%=isLambda%>)) {
                                  table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
                                                  "<td></td>" +
@@ -483,7 +490,9 @@ jagg.template("application", function (inputs, outputs, jagg) {
                              }
                         }
                     } else if (event.status == "pending"){
+                    console.log("pending ");
                         if (event.name === "Status") {
+                        console.log("pending Status");
                             statusStyle = "active";
                              if (<%=isLambda%>) {
                                      table = table + "<tr class='" + statusStyle + "'><td>Lambda Function  status</td>" +
@@ -496,6 +505,7 @@ jagg.template("application", function (inputs, outputs, jagg) {
 
                              }
                         } else {
+                            console.log("pendin g-not-Status");
                             statusStyle = "active";
                              if (!(<%=isLambda%>)) {
                                  table = table + "<tr class='" + statusStyle + "'><td>" + event.name + "</td>" +
@@ -841,7 +851,6 @@ jagg.template("application", function (inputs, outputs, jagg) {
     });
 
     function activateCreateApplication() {
-          // console.log( JSON.stringify(getProperties("env-pane").concat(getLambdaProperties())));
         //first disable the button and then enable it only if condions are satisfied
         $("#add-application").prop("disabled", true);
 
@@ -854,10 +863,10 @@ jagg.template("application", function (inputs, outputs, jagg) {
             } else {
                 if ($("#uploadedFileName").val() || $("#artifactUrl").val() || ($("#gitRepoUrl").val()  && $("#gitRepoBranch").val())) { // validations for non custom app types
 
-                     if(<%=isLambda%>){
-                            if ($("#lambdaClass").val()) {
-                              checkUploadedFile();
-                            }
+                     if (<%=isLambda%>) {
+                        if ($("#lambdaClass").val()) {
+                          checkUploadedFile();
+                        }
 
                       }else{
                          checkUploadedFile();
@@ -1215,6 +1224,10 @@ jagg.template("application", function (inputs, outputs, jagg) {
                 <div class="form-group">
                     <label for="function-name">Function Name:</label>
                     <input id="functionName" name="functionName" type="text" class="form-control" placeholder="Enter Lambda function name" maxlength="100" />
+                </div>
+                <div class="form-group">
+                    <label for="Event ">Event:</label>
+                    <input id="lambdaevent" name="lambda-event" type="text" class="form-control" placeholder="Enter Lambda function Event" maxlength="100" />
                 </div>
             <%}%>
             <!--div class="form-group">

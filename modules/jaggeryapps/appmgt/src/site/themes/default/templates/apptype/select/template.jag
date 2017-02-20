@@ -23,6 +23,7 @@ jagg.template("apptype/select", function(inputs, outputs, jagg) {
     var appTypes = outputs.appTypes;
     var requestNewAppTypeURL = outputs.requestNewAppTypeURL;
     var cloudSpecificApplicationRepresentation = outputs.cloudSpecificApplicationRepresentation;
+    var log = new Log("apptype/select");
      %>
 
     <div class="action-bar">
@@ -74,6 +75,7 @@ jagg.template("apptype/select", function(inputs, outputs, jagg) {
             <%
             if (appTypes.length > 0) {
                 for (var y = 0; y < appTypes.length; y++){
+
                     if(appTypes[y].cssProperties && appTypes[y].cssProperties.category == 'services'){
                     %>
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 ">
