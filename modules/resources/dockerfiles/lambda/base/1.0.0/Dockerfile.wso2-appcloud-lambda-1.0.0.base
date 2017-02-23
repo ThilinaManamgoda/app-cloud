@@ -20,27 +20,27 @@
 
 FROM anapsix/alpine-java:8_server-jre_unlimited
 
-ENV MSF4J_HOME /home/wso2user/
-ENV PATH $MSF4J_HOME:$PATH
+ENV LAMBDA_FUNCTION_HOME /home/wso2user/
+ENV PATH $LAMBDA_FUNCTION_HOME:$PATH
 ENV HTTPS_CONF /opt/conf/https/
 
 RUN apk update && \
     apk add wget && \
-    mkdir -p "$MSF4J_HOME" && \
+    mkdir -p "$LAMBDA_FUNCTION_HOME" && \
     mkdir -p "$HTTPS_CONF/" && \
-    addgroup wso2 && adduser -g '' -s /bin/bash -D -G wso2 wso2user 
+    addgroup wso2 && adduser -g '' -s /bin/bash -D -G wso2 wso2user
 
 COPY wso2carbon.jks "$HTTPS_CONF"
 COPY netty-transports.yaml "$HTTPS_CONF"
-COPY core-1.0-SNAPSHOT.jar "$MSF4J_HOME"
-COPY WSO2FunctionClient-1.0-SNAPSHOT.jar "$MSF4J_HOME"
+COPY core-1.0-SNAPSHOT.jar "$LAMBDA_FUNCTION_HOME"
+COPY WSO2FunctionClient-1.0-SNAPSHOT.jar "$LAMBDA_FUNCTION_HOME"
 
 # Add the startup script
 ADD init.sh /init.sh
 RUN chmod +x /init.sh
 USER wso2user
 
-WORKDIR $MSF4J_HOME
+WORKDIR $LAMBDA_FUNCTION_HOME
 
 EXPOSE 8080 8443
 
