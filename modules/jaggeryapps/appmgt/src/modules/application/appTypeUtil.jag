@@ -91,19 +91,7 @@ MSSAppTypeUtil.prototype.getEndpoints = function (deploymentUrl, versionId) {
 };
 
 LambdaAppTypeUtil.prototype.getEndpoints = function (deploymentUrl, versionId) {
-    var swaggerUrl = deploymentUrl + "/swagger";
-    var endpoints = null;
-    try {
-        // check whether accessible
-        //get(swaggerUrl, {}, "json");
-
-        var swaggerEndpoints = [];
-        endpoints = createJsonResponse(null, null, null, swaggerEndpoints);
-        swaggerEndpoints.push({context : "/swagger", url: swaggerUrl});
-    } catch(e) {
-        return null;
-    }
-    return endpoints;
+    return null;
 };
 
 

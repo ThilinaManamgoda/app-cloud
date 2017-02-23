@@ -37,4 +37,4 @@ if [[ $ENABLE_JFR && ${ENABLE_JFR-_} && $ENABLE_JFR == "true" ]]; then
     export JAVA_OPTS=$JAVA_OPTS" -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=20s,duration=60s,name=jfr_recording,filename=/home/wso2user/jfr_recording.jfr,settings=profile"
 fi
 
-java $JAVA_OPTS -cp .:core-1.0-SNAPSHOT.jar:$MSF4J_JAR:WSO2FunctionClient-1.0-SNAPSHOT.jar -Dtransports.netty.conf=/opt/conf/https/netty-transports.yaml org.wso2.core.service.LambdaServiceRunner
+java $JAVA_OPTS -cp .:core-1.0-SNAPSHOT.jar:$LAMBDA_FUNCTION:WSO2FunctionClient-1.0-SNAPSHOT.jar -Dtransports.netty.conf=/opt/conf/https/netty-transports.yaml org.wso2.core.service.LambdaServiceRunner
