@@ -106,6 +106,9 @@ var log = new Log();
 
         var appTypeName = request.getParameter("appTypeName");
         if (validateRequired("appTypeName", appTypeName)) {return;}
+        if (appTypeName == "lambda") {
+            exposureLevel = "private";
+        }
 
         // validate allowed runtimes
         var runtimes = applicationModule.getAllRuntimes(appTypeName);
