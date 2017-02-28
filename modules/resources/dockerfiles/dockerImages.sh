@@ -62,3 +62,8 @@ docker build --no-cache -t docker.wso2.com/wso2-cloud/wso2esb:5.0.0-alpine3.4-or
 #lambda base image
 docker build --no-cache -t wso2-appcloud/wso2-cloud/lambda:1.0.0-alpine3.4-oracle-jdk1.8.0 -f $CURRENT_DIR/lambda/base/1.0.0/Dockerfile.wso2-appcloud-lambda-1.0.0.base $CURRENT_DIR/lambda/base/1.0.0/
 
+#docker in docker (DinD) base image for custom docker
+docker build --no-cache -t docker.wso2.com/wso2-cloud/custom:dind-base -f $CURRENT_DIR/custom/base/Dockerfile $CURRENT_DIR/custom/base/
+
+#ballerina base image
+docker build --no-cache -t docker.wso2.com/wso2-cloud/ballerina:8.0.0-base -f $CURRENT_DIR/ballerina/base/0.8.0/Dockerfile.wso2-ballerina-0.8.0.base $CURRENT_DIR/ballerina/base/0.8.0

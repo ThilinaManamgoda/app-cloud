@@ -58,7 +58,8 @@ INSERT INTO `AC_APP_TYPE` (`id`, `name`, `description`) VALUES
 (5, 'wso2dataservice', 'Allows you to deploy a data service that is supported in WSO2 Data Services Server.'),
 (6, 'wso2esb', 'Allows you to deploy an ESB configuration that is supported by WSO2 Enterprise Service Bus'),
 (7, 'custom', 'Allows you to deploy applications using custom Docker images'),
-(8, 'lambda', 'Allows you to deploy Lambda Functions');
+(8, 'ballerina', 'Allows you to deploy Ballerina service. Ballerina is a general purpose, concurrent and strongly typed programming language with both textual and graphical syntaxes.'),
+(9, 'lambda', 'Allows you to deploy Lambda Functions');
 
 -- -----------------------------------------------------
 -- Table `AppCloudDB`.`AC_RUNTIME`
@@ -88,15 +89,16 @@ INSERT INTO `AC_RUNTIME` (`id`, `name`, `image_name`, `tag`, `description`) VALU
 (8, 'OracleJDK 8 + WSO2 MSF4J 2.0.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102'),
 (9, 'WSO2 Enterprise Service Bus - 5.0.0', 'wso2esb', '5.0.0', 'OS:Debian, Oracle JDK:8u102'),
 (10, 'Apache Tomcat 8.0.36 / WSO2 Application Server 6.0.0-M3 - Deprecated', 'wso2as', '6.0.0-m3', 'OS:alpine-java, Oracle JDK:8u102'),
-(11, 'Custom Docker Image runtime', 'custom', 'customtag', 'OS:Custom, JAVA Version:custom'),
+(11, 'Custom Docker http-9443 https-9763', 'custom', 'customtag', 'OS:Custom, JAVA Version:custom'),
 (12, 'WSO2 Data Services Server - 3.5.1', 'wso2dataservice', '3.5.1', 'OS:alpine-java, Oracle JDK:8u102'),
 (13, 'Apache Tomcat 8.5.5 (Alpine 3.4/Oracle JDK 1.8.0_112)', 'tomcat', '8.5.5-alpine3.4-oracle-jdk1.8.0', 'OS:Alpine 3.4, Oracle JDK 1.8.0_112'),
 (14, 'Apache Tomcat 8.5.5 (Ubuntu 16.04/Oracle JDK 1.8.0_112)', 'tomcat', '8.5.5-ubuntu16.04-oracle-jdk1.8.0', 'OS:Ubuntu 16.04, Oracle JDK 1.8.0_112'),
 (15, 'Apache Tomcat 8.5.5 (Alpine 3.4/Open JDK 1.8.0_92)', 'tomcat', '8.5.5-alpine3.4-open-jdk1.8.0', 'OS:Alpine 3.4, Open JDK 1.8.0_92'),
 (16, 'Apache Tomcat 8.5.5 (Ubuntu 16.04/Open JDK 1.8.0_91)', 'tomcat', '8.5.5-ubuntu16.04-open-jdk1.8.0', 'OS:Ubuntu 16.04, Open JDK 1.8.0_91'),
-(17, 'OracleJDK 8 + WSO2 MSF4J 2.1.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102')
-(17, 'OracleJDK 8 + LAMBDA', 'lambda', '1.0.0', 'OS:alpine-java, Oracle JDK:8u102');
-
+(17, 'OracleJDK 8 + WSO2 MSF4J 2.1.0', 'msf4j', '2.0.0', 'OS:alpine-java, Oracle JDK:8u102'),
+(18, 'Custom Docker http-8080 https-8443', 'custom', 'customtag', 'OS:Custom, JAVA Version:custom'),
+(19, 'Ballerina 0.8.0 (Alpine 3.4/Oracle JDK 1.8.0_112)', 'ballerina', '0.8.0', 'OS:Alpine 3.4, Oracle JDK 1.8.0_112'),
+(20, 'OracleJDK 8 + LAMBDA', 'lambda', '1.0.0', 'OS:alpine-java, Oracle JDK:8u102');
 
 
 -- -----------------------------------------------------
@@ -269,9 +271,10 @@ INSERT INTO `AC_APP_TYPE_RUNTIME` (`app_type_id`, `runtime_id`) VALUES
 (1, 14),
 (1, 15),
 (1, 16),
-(2, 17)
-(8,18);
-
+(2, 17),
+(7, 18),
+(8, 19),
+(9, 20);
 
 
 -- -----------------------------------------------------
@@ -449,7 +452,9 @@ INSERT INTO `AC_TRANSPORT` (`id`, `name`, `port`, `protocol`, `service_prefix`, 
 (5, 'http', 9763, 'TCP', 'htp', 'HTTP servlet transport for carbon products'),
 (6, 'https', 9443, 'TCP', 'hts', 'HTTPS servlet transport for carbon products'),
 (7, 'http', 8280, 'TCP', 'htp', 'HTTP Protocol'),
-(8, 'https', 8243, 'TCP', 'hts', 'HTTPS Protocol');
+(8, 'https', 8243, 'TCP', 'hts', 'HTTPS Protocol'),
+(9, 'http', 9090, 'TCP', 'htp', 'HTTPS Protocol for Ballerina'),
+(10, 'https', 9092, 'TCP', 'hts', 'HTTPS Protocol for Ballerina');
 
 -- -----------------------------------------------------
 -- Populate Data to `AppCloudDB`.`ApplicationRuntimeService`
@@ -488,13 +493,20 @@ INSERT INTO `AC_RUNTIME_TRANSPORT` (`transport_id`, `runtime_id`) VALUES
 (4, 15),
 (4, 16),
 (3, 17),
-(4, 17);
+(4, 17),
+(3, 18),
+(4, 18),
+(9, 19),
+(10, 19),
+(3, 20),
+(4, 20);
 
 INSERT INTO `AC_CONTAINER_SPECIFICATIONS` (`CON_SPEC_NAME`, `CPU`, `MEMORY`, `COST_PER_HOUR`) VALUES
 ('128MB RAM and 0.1x vCPU', 100, 128, 1),
 ('256MB RAM and 0.2x vCPU', 200, 256, 2),
 ('512MB RAM and 0.3x vCPU', 300, 512, 3),
-('1024MB RAM and 0.5x vCPU', 500, 1024, 4);
+('1024MB RAM and 0.5x vCPU', 500, 1024, 4),
+('2048MB RAM and 1x vCPU', 1000, 2048, 5);
 
 INSERT INTO `AC_SUBSCRIPTION_PLANS` (`PLAN_ID`, `PLAN_NAME`, `MAX_APPLICATIONS`, `MAX_DATABASES`, `CLOUD_ID`, `MAX_REPLICA_COUNT`) VALUES
 (1, 'FREE', 3, 3, 'app_cloud', 2),
@@ -537,7 +549,12 @@ INSERT INTO `AC_RUNTIME_CONTAINER_SPECIFICATIONS` (`id`, `CON_SPEC_ID`) VALUES
 (16, 4),
 (17, 2),
 (17, 3),
-(17, 4);
+(17, 4),
+(18, 4),
+(19, 5),
+(19, 7),
+(20, 2),
+(20, 3);
 
 -- -----------------------------------------------------
 -- Table `AppCloudDB`.`AC_CLOUD_APP_TYPE`
@@ -565,16 +582,33 @@ INSERT INTO `AC_CLOUD_APP_TYPE` (`cloud_id`, `app_type_id`) VALUES
 ('app_cloud', 5),
 ('app_cloud', 6),
 ('app_cloud', 7),
-('app_cloud',8),
+('app_cloud', 8),
+('app_cloud', 9),
 ('integration_cloud', 1),
 ('integration_cloud', 2),
 ('integration_cloud', 3),
 ('integration_cloud', 4),
 ('integration_cloud', 5),
 ('integration_cloud', 6),
-('integration_cloud', 7);
+('integration_cloud', 7),
+('integration_cloud', 8),
+('integration_cloud', 9);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- --------------------------------------------------
+-- CUSTOM DOCKER IMAGE TABLE
+-- --------------------------------------------------
+CREATE TABLE IF NOT EXISTS `AppCloudDB`.`AC_CUSTOM_DOCKER_IMAGES` (
+  `image_id` VARCHAR(500) NOT NULL,
+  `tenant_id` INT NOT NULL,
+  `remote_url` VARCHAR(500) NULL,
+  `test_results_json` VARCHAR(500) NULL,
+  `status` VARCHAR(10) NULL,
+  `last_updated` DATETIME NULL,
+  PRIMARY KEY (`image_id`))
+ENGINE = InnoDB;
+

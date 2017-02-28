@@ -18,39 +18,21 @@
 
 function loadEndpointView() {
     clearInterval(timerId);
-    if (selectedApplicationRevision.status == APPLICATION_RUNNING && application.applicationType != custom) { // endpoints will not be loaded and displayed for custom docker image applications
+    if (selectedApplicationRevision.status == APPLICATION_RUNNING && application.applicationType != custom && application.applicationType != lambda ) { // endpoints will not be loaded and displayed for custom docker image applications
         // This is not implemented for mss 1.0.0 runtimes.
-        if (application.applicationType == "mss" && selectedApplicationRevision.runtimeId == 2) {
-            // if mss 1.0.0 do not show endpoints section
-        } else {
-            if (application.applicationType == "wso2dataservice") {
-                displayEndpointNotloadingMessage();
-            }
-            var deploymentURL = generateDefaultLaunchUrl();
-            if(application.applicationType !="lambda"){
-                showLoadingEndpointView();
-                loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
-           }
-
-            timerId = setInterval(function () {
-                if(application.applicationType !="lambda"){
-                  loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
-                }
-            }, 3000);
-        }
-    } else {
-        $("#app-type-data").html('');
-    }
-}
-
-function displayEndpointNotloadingMessage() {
-    jagg.message({
-        modalStatus: true,
-        type: 'warning',
-        timeout: 15000,
-        content: "The endpoints of your application might not be available if you created it before <b>2016/8/25</b>." +
-            " Please recreate the application or create a new version of it to see the endpoints."
-    });
+               if (application.applicationType == "mss" && selectedApplicationRevision.runtimeId == 2) {
+                   // if mss 1.0.0 do not show endpoints section
+               } else {
+                   showLoadingEndpointView();
+                   var deploymentURL = generateDefaultLaunchUrl();
+                   loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
+                   timerId = setInterval(function () {
+                       loadEndpoints(deploymentURL, applicationType, selectedApplicationRevision.versionId);
+                   }, 3000);
+               }
+           } else {
+               $("#app-type-data").html('');
+       }
 }
 
 function showLoadingEndpointView() {
